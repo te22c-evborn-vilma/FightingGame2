@@ -14,31 +14,17 @@ static void Fight()                                     //metod
 
   int hp1 = 100;
   string char1 = Console.ReadLine();
+  int char1DMG = 0;
 
   int hp2 = 100;
   string char2 = "Coco";
-
-// int char2Name = generator.Next(2);
-
-// if (char2Name == 0)
-// {
-//    char2 = "Coco";
-// }
-// else if (char2Name == 1)
-// {
-//    char2 = "Charlie";
-// }
-// else
-// {
-//    char2 = "Tom";
-// }
+  int char2DMG = 0;
 
   string art = "(/・<・)/     (ò_ó*)";
   Console.Clear();
   Console.WriteLine($"\n{char1} is fighting {char2}\n{art}");
-  Console.WriteLine("\nPress any button to start the fight ^-^");
+  Console.WriteLine("\nPress ENTER to start the fight ^-^");
   Console.ReadLine();
-
 
   while (hp1 > 0 && hp2 > 0)
   {
@@ -46,18 +32,52 @@ static void Fight()                                     //metod
     Console.ForegroundColor = ConsoleColor.Black;
     Console.WriteLine("\n------ <<< NEW GAME >>> ------");
     Console.WriteLine($"{char1}: {hp1}hp {art} {char2}: {hp2}hp");
-  
+    
+
+    Console.WriteLine("Press p to punch or k to kick the other fighter");
+    string answer1 = Console.ReadLine();
+
+    if (answer1 == "k")
+    {
+      char1DMG = generator.Next(5, 15);
+      hp2 -= char1DMG;
+      answer1 = "kicked";
+    }
+    else if (answer1 == "p")
+    {
+      char1DMG = generator.Next(15, 25);
+      hp2 -= char1DMG;
+      answer1 = "punched";
+    }
+    else
+    {
+      Console.WriteLine("Sorry, that won't work. Press ENTER to start from the beginning");
+      Console.ReadLine();
+      Console.Clear();
+      Fight();
+    }
+      
     Console.ForegroundColor = ConsoleColor.DarkCyan;
-    int char1DMG = generator.Next(25);
-    hp2 -= char1DMG;
     hp2 = Math.Max(0, hp2);
-    Console.WriteLine($"{char1} does {char1DMG} DMG on {char2}");
+    Console.WriteLine($"{char1} {answer1} {char2} and did {char1DMG} DMG");
 
     Console.ForegroundColor = ConsoleColor.DarkRed;
-    int char2DMG = generator.Next(25);
-    hp1 -= char2DMG;
+    string char2Action = "did nothing";
+    int char2RDMG = generator.Next(2);
+    if (char2RDMG == 0)
+    {
+      char2DMG = generator.Next(5, 15);
+      hp1 -= char2DMG;
+      char2Action = "kicked";
+    }
+    else if (char2RDMG == 1)
+    {
+      char2DMG = generator.Next(15, 25);
+      hp1 -= char2DMG;
+      char2Action = "punched";
+    }
     hp1 = Math.Max(0, hp1);
-    Console.WriteLine($"{char2} does {char2DMG} DMG on {char1}");
+    Console.WriteLine($"{char2} {char2Action} {char1} and did {char2DMG} DMG");
 
     Console.ForegroundColor = ConsoleColor.Black;
     Console.WriteLine("\nPress any button to continue the fight");
@@ -84,28 +104,33 @@ static void Fight()                                     //metod
     Console.WriteLine($"--- The winner is {char1}! ---");
     Console.WriteLine("        （~＾ O ＾）~");
   }
+  
+  PlayAgain();
 
-  Console.ForegroundColor = ConsoleColor.Black;
-  Console.WriteLine("Would you like to play again?");
+  static void PlayAgain()
+  {
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.WriteLine("\nWould you like to play again?");
 
-  string playAgain = Console.ReadLine();
-  playAgain = playAgain.ToLower();
-
-  if (playAgain == "yes")
-  {
-    Console.Clear();
-    Fight();
-  }
-  else if (playAgain == "no")
-  {
-    Console.Clear();
-    Console.WriteLine($"\nThank you for playing! (/^-^)/");
-  }
-  else
-  {
-    Console.Clear();
-    Console.WriteLine("Sorry, I don't understand what you mean\nYou must start from the beginning");
-    Fight();
+    string playAgain = Console.ReadLine();
+    playAgain = playAgain.ToLower();
+    
+    if (playAgain == "yes")
+    {
+      Console.Clear();
+      Fight();
+    }
+    else if (playAgain == "no")
+    {
+      Console.Clear();
+      Console.WriteLine($"\nThank you for playing! (/^-^)/");
+    }
+    else
+    {
+      Console.Clear();
+      Console.WriteLine("Sorry, I don't understand what you mean\nPlease try again");
+      PlayAgain();
+    }
   }
 }
 
